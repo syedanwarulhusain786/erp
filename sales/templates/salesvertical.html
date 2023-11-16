@@ -1,0 +1,123 @@
+{% load static %}
+<aside class="left-sidebar with-vertical">
+    <div><!-- ---------------------------------- -->
+      <!-- Start Vertical Layout Sidebar -->
+      <!-- ---------------------------------- -->
+      <div class="brand-logo d-flex align-items-center justify-content-between">
+        <a href="https://bootstrapdemos.adminmart.com/modernize/dist/main/index.html" class="text-nowrap logo-img">
+          <img src="{% static '/assets\images\logos\favicon.png' %}" class="dark-logo" alt="Logo-Dark" id="logo" />
+          <img src="{% static '/assets\images\logos\favicon.png' %}" class="light-logo" alt="Logo-light" id="logo" />
+        </a>
+        <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
+          <i class="ti ti-x"></i>
+        </a>
+      </div>
+
+
+      <nav class="sidebar-nav scroll-sidebar" data-simplebar>
+        <h5 class="hide-menu">Sales DashBoard</h5>
+
+        <ul id="sidebarnav">
+          <!-- ---------------------------------- -->
+          <!-- Home -->
+
+          <!-- ---------------------------------- -->
+          <li class="nav-small-cap">
+            <i class="ti ti-home-down"></i>
+            <span class="hide-menu">Home</span>
+          </li>
+          <!-- ---------------------------------- -->
+          <!-- Dashboard -->
+          <!-- ---------------------------------- -->
+          <!-- <li class="sidebar-item">
+            <a class="sidebar-link" href="{% url 'home' %}"
+              aria-expanded="false">
+              <span>
+                <i class="ti ti-dashboard"></i>
+              </span>
+              <span class="hide-menu">DashBoard</span>
+            </a>
+          </li> -->
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{% url 'products' %}"
+              aria-expanded="false">
+              <span>
+                <i class="ti ti-brand-producthunt"></i>
+              </span>
+              <span class="hide-menu">Products</span>
+            </a>
+          </li>
+
+
+          <li class="nav-small-cap">
+            <i class="ti ti-report-money"></i>
+            <span class="hide-menu">Sales</span>
+          </li>
+
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{% url 'sales' %}"
+              aria-expanded="false">
+              <span>
+                <i class="ti ti-report-money"></i>
+              </span>
+              <span class="hide-menu">Create Sales Order</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{% url 'sales_list' %}"
+              aria-expanded="false">
+              <span>
+                <i class="ti ti-list-numbers"></i>
+              </span>
+              <span class="hide-menu">Sales Order List</span>
+            </a>
+          </li>
+
+
+
+
+
+
+
+
+
+
+
+
+          <li class="nav-small-cap">
+            <i class="ti ti-shopping-cart-question"></i>
+            <span class="hide-menu">Enquiry</span>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{% url 'create_quotation' %}"
+              aria-expanded="false">
+              <span>
+                <i class="ti ti-quote"></i>
+              </span>
+              <span class="hide-menu">Create New Quotations</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{% url 'quotelist' %}"
+              aria-expanded="false">
+              <span>
+                <i class="ti ti-blockquote"></i>
+              </span>
+              <span class="hide-menu">Quotations List</span>
+            </a>
+          </li>
+
+          
+        </ul>
+      </nav>
+
+
+
+      <!-- ---------------------------------- -->
+      <!-- Start Vertical Layout Sidebar -->
+      <!-- ---------------------------------- -->
+    </div>
+  </aside>
