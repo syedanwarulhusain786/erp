@@ -1,4 +1,4 @@
-{% extends 'salesbase.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
 <!-- GOOGLE FONTS -->
@@ -53,275 +53,263 @@
 <!-- ====================================
         ——— CONTENT WRAPPER
         ===================================== -->
-<div class="content-wrapper">
-    <div class="content">
-        <!-- Top Statistics -->
-        <div class="container mt-5 text-center" style="max-width:1920px;">
+<div>
+    <form id="myActualForm" method="Post">
+
+        {% csrf_token %}
+
+
+
+
+
+
+
+
+        <div id="bankForm" style="display: block;">
             <div class="card">
-                
+                <div class="form-group">
+                    <div class="container">
+                        <div class="row">
 
-                <div class="card-body">
-                    <form id="myActualForm" method="Post">
-
-                        {% csrf_token %}
-
-
-
-
-
-
-
-
-                        <div id="bankForm" style="display: block;">
-                            <div class="card">
+                            <div class="col">
+                                <label class="col-form-label" for="bankjournal_date">Date <span
+                                        class="text-danger">*&emsp;</span></label>
+                                <input type="date" class="form-control" id="bankjournal_date" readonly>
+                            </div>
+                            <div class="col">
+                                <label class="col-form-label" for="voucher_no"> Quotation No  <span
+                                        class="text-danger">*&emsp; <span style="font-size: 60%;">(This is not Final Quote Number It may change after submittion)</span></span></label>
+                                <input type="text" class="form-control " id="quotation_number" name="quotation_number" value='{{quotation_number}}' readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <div class="container">
-                                        <div class="row">
-
-                                            <div class="col">
-                                                <label class="col-form-label" for="bankjournal_date">Date <span
-                                                        class="text-danger">*&emsp;</span></label>
-                                                <input type="date" class="form-control" id="bankjournal_date" readonly>
-                                            </div>
-                                            <div class="col">
-                                                <label class="col-form-label" for="voucher_no"> Quotation No  <span
-                                                        class="text-danger">*&emsp; <span style="font-size: 60%;">(This is not Final Quote Number It may change after submittion)</span></span></label>
-                                                <input type="text" class="form-control " id="quotation_number" name="quotation_number" value='{{quotation_number}}' readonly>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label for="customerName">Customer Name</label>
-                                                    <input type="text" class="form-control" id="customerName" name="customer_name" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label for="companyName">Company Name</label>
-                                                    <input type="text" class="form-control" id="companyName" name="company_name">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label for="contactPerson">Contact Person</label>
-                                                    <input type="text" class="form-control" id="contactPerson" name="contact_person" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label for="contactEmail">Contact Email</label>
-                                                    <input type="email" class="form-control" id="contactEmail" name="contact_email" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                
-                                        <!-- Contact Information -->
-                                        <div class="row">
-                                            
-                                        </div>
-                                
-                                        <!-- Billing and Shipping Addresses -->
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="billingAddress">Billing Address</label>
-                                                    <textarea class="form-control" id="billingAddress" name="billing_address" rows="3" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="shippingAddress">Shipping Address</label>
-                                                    <textarea class="form-control" id="shippingAddress" name="shipping_address" rows="3"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                
-                                        <!-- Quotation Details -->
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="quotationNumber">Quotation Number</label>
-                                                    <input type="text" class="form-control" id="quotationNumber" name="quotation_number" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="quotationDate">Quotation Date</label>
-                                                    <input type="date" class="form-control" id="quotationDate" name="quotation_date" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="expiryDate">Expiry Date</label>
-                                                    <input type="date" class="form-control" id="expiryDate" name="expiry_date" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <label for="customerName">Customer Name</label>
+                                    <input type="text" class="form-control" id="customerName" name="customer_name" required>
                                 </div>
                             </div>
-
-
-
-
-
-
-
-                            <!-- Table -->
-
-                        </div>
-                        <div class="card">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="transactionTable">
-                                    <thead>
-                                        <tr>
-
-                                            <th>Product</th>
-                                            <th>Product Name</th>
-                                            <th>Description</th>
-                                            <th>Quantity</th>
-                                            <th>Unit Price</th>
-
-                                            <th>Amount</th>
-                                            <th>Remove</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr>
-
-                                            <td>
-                                                <select class="form-control" id="dropdown1">
-                                                    {% for account in account_list %}
-                                                    <option
-                                                        data-value="{{ account.group.primary_group.primary_group_name }}"
-                                                        data-tokens="{{ account.group }}"
-                                                        id="{{ account.ledger_number.subcategory_name }}"
-                                                        value="{{ account.ledger_number }}">{{ account.ledger_name }}
-                                                    </option>
-
-
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" id="cat1" name="cat1" >
-
-                                            </td>
-                                            <td>
-                                                <input type="text"  class="form-control" id="sub1">
-                                            </td>
-
-                                            <td><input type="text" class="form-control" id="ref1"></td>
-                                            <td><input type="text" class="form-control" id="qty1" value=1></td>
-                                            <td><input type="text" class="form-control" id="unt1" ></td>
-
-
-                                            <td><input type="number" class="form-control" step="0.01" id="amt1" ></td>
-
-
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-
-                                          
-                                            </td>
-                                            <td>
-
-
-                                            </td>
-                                            <td>
-                                                
-
-                                            </td>
-                                            <td></td>
-                                            <td>
-                                            </td>
-                                            <td>
-                                                <span><b>Sub Total:</b></span>
-                                            </td>
-                                            <!-- <td><input type="number" class="form-control" step="0.01" id="c_total"
-                                                    disabled>
-                                            </td> -->
-                                            <td><input type="number" class="form-control" step="0.01" id="d_total"
-                                                ></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-
-                                            </td>
-                                            <td>
-
-
-                                            </td>
-                                            <td>
-                                                <span><b></b></span>
-
-                                            </td>
-                                            <td></td>
-                                            <td>
-                                            </td>
-                                            <td>
-                                                Tax (10%)
-                                            </td>
-                                            <!-- <td><input type="number" class="form-control" step="0.01" id="c_total"
-                                                    disabled>
-                                            </td> -->
-                                            <td><input type="number" class="form-control" step="0.01" id="d_tax"
-                                                ></td>
-                                        </tr>
-
-
-                                        <tr>
-                                            <td>
-
-                                                <button type="button" class="btn btn-primary" id="addRowButton">Add
-                                                    Row</button>
-                                            </td>
-                                            <td>
-
-
-                                            </td>
-                                            <td>
-                                                <span><b></b></span>
-
-                                            </td>
-                                            <td></td>
-                                            <td>
-                                            </td>
-                                            <td>
-                                                Grand Total :
-                                            </td>
-                                            <!-- <td><input type="number" class="form-control" step="0.01" id="c_total"
-                                                    disabled>
-                                            </td> -->
-                                            <td><input type="number" class="form-control" step="0.01" id="final"
-                                                ></td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="companyName">Company Name</label>
+                                    <input type="text" class="form-control" id="companyName" name="company_name">
+                                </div>
                             </div>
-
-                            <!-- Submit Button -->
-                            <!-- Submit Button -->
-                            <div class="form-group text-center my-5">
-                                <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
-                                <button type="button" class="btn btn-primary" id="clearFormButton">Clear</button>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="contactPerson">Contact Person</label>
+                                    <input type="text" class="form-control" id="contactPerson" name="contact_person" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="contactEmail">Contact Email</label>
+                                    <input type="email" class="form-control" id="contactEmail" name="contact_email" required>
+                                </div>
                             </div>
                         </div>
-                    </form>
+                
+                        <!-- Contact Information -->
+                        <div class="row">
+                            
+                        </div>
+                
+                        <!-- Billing and Shipping Addresses -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="billingAddress">Billing Address</label>
+                                    <textarea class="form-control" id="billingAddress" name="billing_address" rows="3" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="shippingAddress">Shipping Address</label>
+                                    <textarea class="form-control" id="shippingAddress" name="shipping_address" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Quotation Details -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="quotationNumber">Quotation Number</label>
+                                    <input type="text" class="form-control" id="quotationNumber" name="quotation_number" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="quotationDate">Quotation Date</label>
+                                    <input type="date" class="form-control" id="quotationDate" name="quotation_date" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="expiryDate">Expiry Date</label>
+                                    <input type="date" class="form-control" id="expiryDate" name="expiry_date" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
+
+
+
+
+
+
+            <!-- Table -->
+
+        </div>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="transactionTable">
+                    <thead>
+                        <tr>
+
+                            <th>Product</th>
+                            <th>Product Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+
+                            <th>Amount</th>
+                            <th>Remove</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <select class="form-control" id="dropdown1">
+                                    {% for account in account_list %}
+                                    <option
+                                        data-value="{{ account.group.primary_group.primary_group_name }}"
+                                        data-tokens="{{ account.group }}"
+                                        id="{{ account.ledger_number.subcategory_name }}"
+                                        value="{{ account.ledger_number }}">{{ account.ledger_name }}
+                                    </option>
+
+
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" id="cat1" name="cat1" >
+
+                            </td>
+                            <td>
+                                <input type="text"  class="form-control" id="sub1">
+                            </td>
+
+                            <td><input type="text" class="form-control" id="ref1"></td>
+                            <td><input type="text" class="form-control" id="qty1" value=1></td>
+                            <td><input type="text" class="form-control" id="unt1" ></td>
+
+
+                            <td><input type="number" class="form-control" step="0.01" id="amt1" ></td>
+
+
+                        </tr>
+
+                        <tr>
+                            <td>
+
+                          
+                            </td>
+                            <td>
+
+
+                            </td>
+                            <td>
+                                
+
+                            </td>
+                            <td></td>
+                            <td>
+                            </td>
+                            <td>
+                                <span><b>Sub Total:</b></span>
+                            </td>
+                            <!-- <td><input type="number" class="form-control" step="0.01" id="c_total"
+                                    disabled>
+                            </td> -->
+                            <td><input type="number" class="form-control" step="0.01" id="d_total"
+                                ></td>
+                        </tr>
+
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td>
+
+
+                            </td>
+                            <td>
+                                <span><b></b></span>
+
+                            </td>
+                            <td></td>
+                            <td>
+                            </td>
+                            <td>
+                                Tax (10%)
+                            </td>
+                            <!-- <td><input type="number" class="form-control" step="0.01" id="c_total"
+                                    disabled>
+                            </td> -->
+                            <td><input type="number" class="form-control" step="0.01" id="d_tax"
+                                ></td>
+                        </tr>
+
+
+                        <tr>
+                            <td>
+
+                                <button type="button" class="btn btn-primary" id="addRowButton">Add
+                                    Row</button>
+                            </td>
+                            <td>
+
+
+                            </td>
+                            <td>
+                                <span><b></b></span>
+
+                            </td>
+                            <td></td>
+                            <td>
+                            </td>
+                            <td>
+                                Grand Total :
+                            </td>
+                            <!-- <td><input type="number" class="form-control" step="0.01" id="c_total"
+                                    disabled>
+                            </td> -->
+                            <td><input type="number" class="form-control" step="0.01" id="final"
+                                ></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Submit Button -->
+            <!-- Submit Button -->
+            <div class="form-group text-center my-5">
+                <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
+                <button type="button" class="btn btn-primary" id="clearFormButton">Clear</button>
             </div>
         </div>
-
-    </div>
+    </form>
 </div>
+                 
 
 <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="subTableModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

@@ -6,17 +6,11 @@ from django.contrib.auth import get_user_model
 import uuid
 class AccountType(models.Model):
     ACCOUNT_TYPE_CHOICES = [
-        ('CEO', 'CEO'),
+        ('Supplier', 'Supplier'),
         ('HR_MANAGER', 'HR Manager'),
-        ('HR_HEAD', 'HR Head'),
         ('ACCOUNTANT', 'Accountant'),
-        ('USER', 'User'),
-        ('HEAD', 'Head'),
-        ('MANAGER', 'MANAGER'),
-        ('VIEWER', 'View'),
-        
-        
-        
+        ('Agent', 'Agent'),
+        ('Customer', 'Customer'),
         # Add more choices as needed
     ]
 
@@ -64,12 +58,34 @@ class Company(models.Model):
 
     class Meta:
         verbose_name_plural = 'Companies'
+class TermsAndCondition(models.Model):
+    termType = [
+        ('PAYMENT', 'PAYMENT'),
+        ('SHIPPING', 'SHIPPING'),
+        ('DELIVERY', 'DELIVERY'),
+        ('SERVICES', 'SERVICES'),
+        # Add more choices as needed
+    ]
+    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    name = models.CharField(max_length=100, verbose_name='TermsAndCondition', choices=termType)
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'TermsAndConditions'        
+        
+
 class Department(models.Model):
     DEPARTMENT_CHOICES = [
         ('SALES', 'Sales'),
         ('ACCOUNT', 'Accounting'),
         ('INVENTORY', 'Inventory'),
         ('ADMIN', 'Administration'),
+        ('NONE', 'None'),
+        
         # Add more choices as needed
     ]
     name = models.CharField(max_length=100, verbose_name='Department Name', choices=DEPARTMENT_CHOICES)
@@ -90,6 +106,9 @@ class CustomUser(AbstractUser):
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
+    telegram_id = models.CharField(max_length=50, null=True, blank=True)
     profilePic = models.ImageField(upload_to='product_images/', default="product_images/user-1.jpg")
+    
+    
     
     

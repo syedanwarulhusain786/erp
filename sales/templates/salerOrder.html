@@ -1,4 +1,4 @@
-{% extends 'salesbase.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
 <!-- GOOGLE FONTS -->
@@ -48,20 +48,23 @@
   <script src="https:\\oss.maxcdn.com\respond\1.4.2\respond.min.js' %}"></script>
 <![endif]-->
 <script src="{% static '\home\plugins\nprogress\nprogress.js' %}"></script>
+<style>
+    .row {
+    padding: 20px;
+    }
+    .card {
+    padding: 20px;
 
+    }
+</style>
 
 <!-- ====================================
         ——— CONTENT WRAPPER
         ===================================== -->
-<div class="content-wrapper">
-    <div class="content">
         <!-- Top Statistics -->
-        <div class="container mt-5 text-center" style="max-width:1920px;">
-            <div class="card">
                 
 
-                <div class="card-body">
-                    <form id="myActualForm" method="POST">
+                    <form id="myActualForm" method="POST" style="padding: 50px;">
 
                         {% csrf_token %}
 
@@ -75,7 +78,7 @@
                         <div id="bankForm" style="display: block;">
                             <div class="card">
                                 <div class="form-group">
-                                    <div class="container">
+                                    <div >
 
 
                                         <div class="card">
@@ -93,7 +96,7 @@
                                         </div>
                                         
                             
-                                        <div class="row">
+                                        <div class="row ">
 
                                             <div class="col">
                                                 <label class="col-form-label" for="bankjournal_date">Date <span
@@ -233,9 +236,9 @@
                                                        >None
                                                     </option>
                                                     <option
-                                                        data-value=" {{ product.product.name }}"
-                                                        data-tokens={{ product.product.price }}
-                                                        value="{{ product.product.price }}">{{ product.product.name }}
+                                                        data-value=" {{ product.name }}"
+                                                        data-tokens="{{ product.productSelling }}"
+                                                        value="{{ product.productSelling }}">{{ product.name }}
                                                     </option>
 
 
@@ -346,13 +349,8 @@
                             </div>
                         </div>
                     </form>
-                </div>
 
-            </div>
-        </div>
 
-    </div>
-</div>
 
 <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="subTableModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

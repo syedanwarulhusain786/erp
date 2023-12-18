@@ -15,6 +15,13 @@ def index(request):
                         if user.department.name=='SALES':
                             login(request, user)
                             return redirect('sales')
+                        elif user.department.name=='ACCOUNT':
+                            login(request, user)
+                            return redirect('account')
+                        elif user.department.name=='NONE':
+                            if user.account_type.name=='Supplier':
+                                login(request, user)
+                                return redirect('supplier-home')
                         login(request, user)
                         return redirect('home')  # Replace 'home' with your home page URL.
                     else:

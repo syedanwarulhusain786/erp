@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-
+from login.models import *
 def get_image_filename(instance, filename):
     """Generate a unique filename for each uploaded image."""
     ext = filename.split('.')[-1]
@@ -10,7 +10,6 @@ def get_image_filename(instance, filename):
 
 
 class Material(models.Model):
-    
     PIECE = 'Piece'
     LITER = 'Liter'
     METER = 'Meter'
@@ -22,38 +21,154 @@ class Material(models.Model):
         (METER, 'Meter'),
         (CMS, 'Centimeter'),
     ]
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=300)
     description = models.TextField(blank=True)
     unit_of_measurement = models.CharField(max_length=10, choices=UNIT_CHOICES, default=PIECE)
+    unit_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    
     def __str__(self):
         return self.name
+
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    description = models.TextField(blank=True)
+    
+
+    def __str__(self):
+        return self.name
+    
+class ProductBrand(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    description = models.TextField(blank=True)
+    
+
+    def __str__(self):
+        return self.name   
+
+    
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    materials = models.ManyToManyField(Material, through='ProductMaterial')
+    description = models.TextField(blank=True, null=True)
+    productCost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    productSelling = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.PROTECT)
+    brand = models.ForeignKey(ProductBrand, on_delete=models.PROTECT)
+    image0 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
+    image1 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
+    image2 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
+    image3 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
+    image4 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
+    image5 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
+    image6 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
+    image7 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
+    image8 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
+    image9 = models.ImageField(upload_to=get_image_filename, blank=True, null=True)
     
+        
     def __str__(self):
         return self.name
 
+    
 class ProductMaterial(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    quantity_per_piece = models.PositiveIntegerField()
-
-    def __str__(self):
-        return f"{self.material} for {self.product}"
+    quantity_per_piece = models.DecimalField(max_digits=10, decimal_places=2)
+    material =models.ManyToManyField(Material)
     
-class ProductImage(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=get_image_filename)
+
+
+
+
+class Order(models.Model):
+    APPROVED = 'approved'
+    DISAPPROVED = 'disapproved'
+    PENDING = 'pending'
+    STATUS_CHOICES = [
+        (APPROVED, 'Approved'),
+        (DISAPPROVED, 'Disapproved'),
+        (PENDING, 'Pending'),
+    ]
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+    product_name = models.CharField(max_length=255)  # New field to store product name
+    quantity = models.PositiveIntegerField()
+    price_per_quantal = models.DecimalField(max_digits=20, decimal_places=2)
+    end_delivery_date = models.DateField(null=True, blank=True)
+    supplier_type= models.CharField(max_length=255) 
+    agent_commission_per_quantal = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    final_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    is_approved = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
+    order_date=models.DateField(auto_now_add=True,null=True, blank=True)
+    quantity_left=models.PositiveIntegerField(default=0)
+    
+    def __str__(self):
+            return f"Order Id {self.user.id} User {self.user.username}"
+
+    
+class DeliveryDetails(models.Model):
+    ROW_TYPE_CHOICES = [
+    ('dispatch', 'Dispatch'),
+    ('delivery', 'Delivery'),
+    ]
+    status_row = [
+    ('pending', 'Pending'),
+    ('delivered', 'Delivered'),
+    ]
+    created_at=models.DateField(auto_now_add=True,null=True, blank=True)
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    row_type = models.CharField(max_length=20, choices=ROW_TYPE_CHOICES)
+    vehicle_number = models.CharField(max_length=20)
+    date_of_delivery = models.DateField()
+    no_of_bags = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField()
+    jute_bags = models.PositiveIntegerField()
+    plastic_bags = models.PositiveIntegerField()
+    fssi = models.PositiveIntegerField()
+    loose = models.PositiveIntegerField()
+    status = models.CharField(max_length=20, choices=status_row,default='pending')
+
+    
+
+    # Calculate final quantity price based on the order's price per quantal
+    def calculate_final_quantity_price(self):
+        order_price_per_quantal = self.order.price_per_quantal
+        self.final_quantity_price = self.quantity * order_price_per_quantal
+
+    final_quantity_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.calculate_final_quantity_price()
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Image for {self.product}"
-class ProductMaterialImage(models.Model):
-    product_material = models.ForeignKey(ProductMaterial, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=get_image_filename)
+        return f"DeliveryDetails for Order {self.order.id}"
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
+    
+class ServiceCategory(models.Model):
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
-        return f"Image for {self.product_material}"
+        return self.name
+
+class Service(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    Qty = models.PositiveIntegerField()
+    costing = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return self.name   

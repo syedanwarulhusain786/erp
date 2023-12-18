@@ -10,34 +10,29 @@ from django.db import transaction
 from commonApp.models import *
 from accounting.models import *
 from login.models import *
-
-
+from django.shortcuts import render, get_object_or_404
+from accounting.models import *
 
 def productDetail(request, product_id):
     # Assuming you have a specific product instance
     # product_id = 1  # Replace with the actual product ID
+    product = get_object_or_404(Product, pk=product_id)
 
-    # Retrieve the product details
-    product = Product.objects.get(pk=product_id)
-
-    # Retrieve all images associated with the product
-    product_images = ProductImage.objects.filter(product=product)
-
-    # Now, you have both product details and its images
+    # Now, you have product details
     product_details = {
         'id': product.id,
         'name': product.name,
         'description': product.description,
-        'price': str(product.price),  # Convert DecimalField to string for serialization
-        'images': [{'id': img.id, 'image_url': img.image.url} for img in product_images],
-        'big_image':[{'id': img.id, 'image_url': img.image.url} for img in product_images][0]
+        'price': str(product.productSelling),  # Convert DecimalField to string for serialization
+        'images': [{'id': i, 'image_url': getattr(product, f'image{i}').url} for i in range(10) if getattr(product, f'image{i}')],
+        'image':[{'id': i, 'image_url': getattr(product, f'image{i}').url} for i in range(10) if getattr(product, f'image{i}')][0]
     }
 
     # 'images' is a list of dictionaries, where each dictionary contains 'id' and 'image_url' keys
     # 'id' is the image ID, and 'image_url' is the URL to the image file
 
     print(product_details)
-    return render(request,'productDetails.html',{'product_details':product_details})
+    return render(request, 'productDetails.html', {'product_details': product_details})
 
 
 def get_next_sales_voucher_number(request):
@@ -53,20 +48,24 @@ def get_next_sales_voucher_number(request):
 
 @login_required(login_url='login')
 def home(request):
-    return render(request,'saleshome.html')
+    return render(request,'salehome.html')
 @login_required(login_url='login')
 def products(request):
 
-    products_with_images = Product.objects.prefetch_related('materials', 'productimage_set').all()
-    products=[]
+    products_with_images = Product.objects.all()
+    products = []
+
     for product in products_with_images:
-        print(product.id)
-        dt={"productId":product.id,
+        product_images = [getattr(product, f'image{i}').url for i in range(10) if getattr(product, f'image{i}')]
+
+        dt = {
+            "productId": product.id,
             "Product_Name": product.name,
-        "Description": product.description,
-        "Price": product.price,
-        "images":["http://127.0.0.1:8000"+image.image.url for image in product.productimage_set.all()][0]
+            "Description": product.description,
+            "Price": product.productSelling,
+            "images": ["http://127.0.0.1:8000" + image_url for image_url in product_images]
         }
+
         products.append(dt)
 
         # Access images
@@ -79,7 +78,7 @@ def products(request):
 
 @login_required(login_url='login')
 def create_sales(request):
-    products=ProductMaterial.objects.all()
+    products=Product.objects.all()
     Ledgers=Ledger.objects.all()
     
     if request.method == 'POST':
@@ -89,7 +88,7 @@ def create_sales(request):
         quotation_number = int(request.POST.get('quotation_number'))
         customer_name = request.POST.get('customer_name')
         ledgerDR = request.POST.get('ledgerDR')
-        print(ledgerDR)
+   
         company_name = request.POST.get('company_name')
         
         contact_person = request.POST.get('contact_person')
@@ -133,7 +132,7 @@ def create_sales(request):
             ledger=led,
         )
         Sales_form=quote.save()
-        print(Sales_form)
+
         # Add a discount field if you intend to use it
 
         # quotation
@@ -161,7 +160,7 @@ def create_sales(request):
 
 
         # Redirect to the detail view for the created quotation
-        return redirect('create_quotation')
+        return redirect('sales_list')
 
     # Atomically increment the quotation number in the database
     latest_quotation = Sales.objects.order_by().last()
@@ -234,7 +233,7 @@ def sales_list(request):
 
 from django.db.models import F
 def create_quotation(request):
-    products=ProductMaterial.objects.all()
+    products=Product.objects.all()
     if request.method == 'POST':
         entry='quotations'
         

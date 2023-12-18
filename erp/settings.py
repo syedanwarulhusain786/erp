@@ -23,15 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@$v^t6^aont_-2t^vqk_g5go-45^e=r-fwx78q^ldjak+_$c_2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["62.72.57.19"]
 
 CORS_ALLOWED_ORIGINS = ["*"]
 BASE_URL = 'http://54.90.126.75' #'http://100.26.54.21'#
 # Application definition
 
 INSTALLED_APPS = [
+    #  'channels',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,11 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'login',
-    'home',
+    'supplier',
     'sales',
     'commonApp',
     'accounting',
 ]
+# ASGI_APPLICATION = 'erp.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,7 +63,7 @@ ROOT_URLCONF = 'erp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,13 +82,22 @@ WSGI_APPLICATION = 'erp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mysql.connector.django',
+#         'NAME': 'erp',   # Replace with your MySQL database name
+#         'USER': 'root',   # Replace with your MySQL database user
+#         'PASSWORD': 'Rusingle@7866',  # Replace with your MySQL database password
+#         'HOST': 'localhost',            # Replace with your MySQL host (e.g., 'localhost' or '127.0.0.1')
+#         'PORT': '3306',                 # Replace with your MySQL port if it's not the default (3306)
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -127,6 +139,19 @@ STATICFILES_DIRS=[
         os.path.join(BASE_DIR,'static'),
         ]
 
+
+# Add the CDN URL to be excluded
+EXCLUDED_CDN_URLS = ['https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css']
+
+# Update the STATICFILES_DIRS setting
+STATICFILES_DIRS = [
+    # Other static file paths...
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Exclude CDN URLs from finders
+STATICFILES_EXCLUDED_URLS = [os.path.join(url, '*') for url in EXCLUDED_CDN_URLS]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -140,3 +165,9 @@ DATETIME_FORMAT = '%Y-%m-%d %H:%m:%s'
 
 
 AUTH_USER_MODEL = 'login.CustomUser'
+
+
+
+TELEGRAM_BOT_TOKEN = '6892855782:AAGTkmOKGRBCqNfSfVw4I1HGHNY1ttToTU4'
+ERP = 'Red Rock ERP'
+
