@@ -12,11 +12,9 @@
 
   .card {
   margin-top: 50px;
-  width: auto;
-  max-width: 100%; /* Adjust the maximum width as needed */
+   /* Adjust the maximum width as needed */
   margin-left: auto;
   margin-right: auto;
-  height: calc(80vh - 100px);
 }
 
   .card-header {
@@ -36,69 +34,103 @@ label {
   padding:5px;
 }
 </style>
-
+<style>
+  label.required::after {
+      content: " *";
+      color: red;
+  }
+</style>
 <div class="card text-center">
     <div class="card-header">
-      Supplier
+      User
     </div>
     <div class="card-body">
       <form name="customerForm" method="POST">
         {% csrf_token %}
-          <div class="row">
-              <div class="col-md-4">
-                <div class="form-group ">
-                  <label for="customerName">Supplier Id</label>
-                  <input type="text" class="form-control" id="voucher_no" name="voucher_no" value="{{next_Supplier_number}}"  readonly>
-                </div>
+        <div class="row">
+            <div class="col-md-3">
+              <div class="form-group ">
+                <label for="customerName">User Id</label>
+                <input type="text" class="form-control" id="voucher_no" name="voucher_no" value="{{next_Supplier_number}}"  readonly>
               </div>
             </div>
-            <div class="row" style="padding:20px">
-
-
-              <div class="col-md-4">
-                <div class="form-group ">
-                  <label for="SupplierName">Supplier Name</label>
-                  <input type="text" class="form-control" name="supplierName" placeholder="Enter Supplier name" >
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="customerCode">Supplier Code</label>
-                  <input type="text" class="form-control" name="supplierCode" id="customerCode" placeholder="Enter Supplier code" value="SP-{{next_Supplier_number}}" readonly>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="creditPeriod">Credit Period <small>(In days)</small></label>
-                  <input type="number" class="form-control" name="creditPeriod" placeholder="Enter credit period">
-                </div>
+            <div class="col-md-3">
+              <div class="form-group ">
+                <label for="id_account_type" class="required">Account Type:</label>
+              <select name="account_type" class="form-control" required>
+                  <option value="" disabled selected>Select account type</option>
+                  {% for type in accountType %}
+                  <option value="{{type.name}}">{{type.name}}</option>
+                  {% endfor %}
+              </select><br>
               </div>
             </div>
-            <div class="row" style="padding:20px">
+            <div class="col-md-3">
+              <div class="form-group ">
+                <label for="customerName" class="required">User Username</label>
+                <input type="text" class="form-control" id="voucher_no" name="username"  required>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group ">
+                <label for="customerName" class="required">User Password</label>
+                <input type="text" class="form-control" id="voucher_no" name="password"  required >
+              </div>
+            </div>
+        </div>
+        <div class="row" style="padding:20px">
+
+
+          <div class="col-md-3">
+            <div class="form-group ">
+              <label for="SupplierName" class="required">First Name</label>
+              <input type="text" class="form-control" name="firstName" placeholder="Enter First name" required>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group ">
+              <label for="SupplierName" class="required">Last Name</label>
+              <input type="text" class="form-control" name="lastName" placeholder="Enter Last name" required>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="customerCode">Supplier Code</label>
+              <input type="text" class="form-control" name="supplierCode" id="customerCode" placeholder="Enter Supplier code" value="SP-{{next_Supplier_number}}" readonly>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="creditPeriod" class="required">Credit Period <small>(In days)</small></label>
+              <input type="number" class="form-control" name="creditPeriod" placeholder="Enter credit period" required>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding:20px">
 
         
 
-                <div class="col-md-4">
+              <div class="col-md-4">
                 <div class="form-group">
-                  <label for="creditLimit">Credit Limit</label>
-                  <input type="number" class="form-control" name="creditLimit" placeholder="Enter credit limit">
+                  <label for="creditLimit" class="required">Credit Limit</label>
+                  <input type="number" class="form-control" name="creditLimit" placeholder="Enter credit limit" required>
                 </div>
               </div>
 
                 <div class="col-md-4">
                 <div class="form-group">
-                  <label for="mailingName">Mailing Name</label>
-                  <input type="text" class="form-control" name="mailingName" placeholder="Enter mailing name">
+                  <label for="mailingName" class="required">Mailing Name</label>
+                  <input type="text" class="form-control" name="mailingName" placeholder="Enter mailing name" required>
                 </div>
               </div>
 
               <div class="col-md-4">
-                <div class="form-group">
-                  <label for="phone">Phone</label>
-                  <input type="text" class="form-control" name="phone" placeholder="Enter phone">
+                <div class="form-group" >
+                  <label for="phone" class="required">Phone</label>
+                  <input type="text" class="form-control" name="phone" placeholder="Enter phone" required>
                 </div>
               </div>
-          </div>
+        </div>
 
 
 
@@ -106,15 +138,15 @@ label {
 
             <div class="col-md-4">
             <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" name="email" placeholder="Enter email">
+              <label for="email" class="required">Email</label>
+              <input type="email" class="form-control" name="email" placeholder="Enter email" required>
             </div>
           </div>
 
             <div class="col-md-4">
             <div class="form-group">
-              <label for="bankAccount">Bank Account</label>
-              <input type="text" class="form-control" name="bankAccount" placeholder="Enter bank account">
+              <label for="bankAccount" >Bank Account</label>
+              <input type="text" class="form-control" name="bankAccount" placeholder="Enter bank account" >
             </div>
           </div>
 
@@ -138,7 +170,7 @@ label {
             <div class="col-md-4">
             <div class="form-group">
               <label for="phoneCstNo">GST No</label>
-              <input type="text" class="form-control" name="GstNo" placeholder="Enter phone number CST No">
+              <input type="text" class="form-control" name="GstNo" placeholder="Enter phone number GST No">
             </div>
           </div>
 
@@ -183,8 +215,8 @@ label {
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label for="areaId">Mobile</label>
-                <input type="text" class="form-control" name="mobile" placeholder="Enter Area ID">
+                <label for="areaId" class="required">Mobile</label>
+                <input type="text" class="form-control" name="mobile" placeholder="Enter Mobile No" required>
               </div>
             </div>
 
@@ -192,8 +224,8 @@ label {
 
             <div class="col-md-4">
               <div class="form-group">
-                  <label for="address">Address</label>
-                  <textarea class="form-control" name="address" placeholder="Enter address"></textarea>
+                  <label for="address" class="required">Address</label>
+                  <textarea class="form-control" name="address" placeholder="Enter address" required></textarea>
               </div>
             </div>
 
@@ -251,9 +283,7 @@ label {
         <button type="button" class="btn btn-secondary">Cancel</button>
       </form>
     </div>
-    <div class="card-footer text-body-secondary">
-      2 days ago
-    </div>
+
 </div>
 <script>
   // JavaScript to show/hide dropdowns based on checkbox state

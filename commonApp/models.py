@@ -102,7 +102,7 @@ class Order(models.Model):
     quantity_left=models.PositiveIntegerField(default=0)
     
     def __str__(self):
-            return f"Order Id {self.user.id} User {self.user.username}"
+            return f"Order Id {self.id} User "
 
     
 class DeliveryDetails(models.Model):
@@ -147,13 +147,7 @@ class DeliveryDetails(models.Model):
     
     
     
-    
-    
-    
-    
-    
-    
-    
+  
    
     
 class ServiceCategory(models.Model):
@@ -172,3 +166,17 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name   
+
+
+
+
+# models.py
+from django.db import models
+from django.contrib.auth.models import User
+
+class Notification(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    order_id = models.IntegerField(null=True, blank=True)
+    message = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)

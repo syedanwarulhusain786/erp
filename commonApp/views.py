@@ -9,6 +9,21 @@ from django.db import transaction
 from commonApp.models import *
 from accounting.models import *
 from login.models import *
+# views.py
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import Notification
+
+def get_notifications(request):
+    user = request.user
+    notifications = Notification.objects.filter(user=user, read=False)
+    notifications_data = [{'message': notification.message, 'timestamp': notification.timestamp} for notification in notifications]
+    return JsonResponse({'notifications': notifications_data})
+
+def mark_notifications_as_read(request):
+    user = request.user
+    Notification.objects.filter(user=user, read=False).update(read=True)
+    return JsonResponse({'success': True})
 
 
 @login_required(login_url='login')

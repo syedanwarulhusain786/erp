@@ -14,7 +14,7 @@
     /* Adjust the maximum width as needed */
     margin-left: auto;
     margin-right: auto;
-    height: calc(80vh - 100px);
+
   }
 
   .card-header {
@@ -36,7 +36,7 @@
 
 <div class="card">
   <div class="card-header">
-    Add Supplier
+  Supplier
   </div>
 
     <div class="card-body">
@@ -44,14 +44,15 @@
       <table class="table table-striped" id="productsTable">
         <div>
           
-          <a href="{% url 'addsupplier' %}" target="_blank" class="mb-1 btn btn-pill btn-primary" id="openModalBtn">Add New Supplier</a>
+          
         </div>
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Supplier Id</th>
-            <th scope="col">Supplier Name</th>
-            <th scope="col">Supplier Code</th>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Username</th>
+
 
             <th scope="col">Mailing Name</th>
             <th scope="col">Phone</th>
@@ -77,7 +78,8 @@
             <td scope="row">{{ forloop.counter }}</td>
             <td>{{ Supplier.supplier_id }}</td>
             <td>{{ Supplier.supplier_name }}</td>
-            <td>{{ Supplier.supplier_code }}</td>
+            <td>{{ Supplier.user.username }}</td>
+
             <td>{{ Supplier.mailing_name }}</td>
             <td>{{ Supplier.phone }}</td>
             <td>{{ Supplier.email }}</td>
@@ -91,7 +93,7 @@
             <td>
 
               <button type="button" class="btn btn-danger"
-                onclick="DeleteAction('delete',{{ Supplier.supplier_id }},'{{ Supplier.supplier_name }}')">Delete</button>
+                onclick="DeleteAction('delete',{{ Supplier.user.id }},'{{ Supplier.user.username }}')">Delete</button>
             </td>
           </tr>
           {% endfor %}
@@ -101,50 +103,7 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="subTableModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="subTableModalLabel">
-          <h2>Add New Primary Group</h2>
-        </h5>
-        <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="subTableContent">
-        <form method="POST" id="accountForm">
-          {% csrf_token %}
 
-          <!-- <label for="accountNumber">Account Number:</label>
-                <input type="text" id="accountNumber" name="accountNumber" readonly> -->
-          <br>
-          <label for="account_category">Account Category:</label>
-          <select class="selectpicker" id="primaryType" name="primaryType" data-live-search="true">
-            <option data-tokens="debit" id="debit"
-              value="debit">Debit</option>
-            <option data-tokens="credit" id="credit"
-              value="credit">Credit</option>
-
-          </select>
-
-          <br>
-          <label for="accountName">Primary Group Name:</label>
-          <input type="text" id="accountName" name="GroupName" required>
-          <br>
-
-
-      </div>
-      <div class="modal-footer">
-          <button type="submit" class="mb-1 btn btn-pill btn-success" name="save">Save</button>
-        </form>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeme">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 <!-- The confirmation modal -->
 <!-- Modal -->
 <div class="modal" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="subTableModalLabel"

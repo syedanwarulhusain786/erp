@@ -1,6 +1,6 @@
 from django.db import models
 
-
+from commonApp.models import *
     
 
 class Primary_Group(models.Model): #### Primary Group
@@ -72,6 +72,8 @@ class Ledger(models.Model): #### Ledger
 
 
 class Customer(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True, blank=True)
+    
     legder = models.ForeignKey(Ledger, on_delete=models.CASCADE)
     customer_id = models.IntegerField(unique=True)
     customer_name = models.CharField(max_length=255)
@@ -118,7 +120,9 @@ class Customer(models.Model):
     
     
 class Supplier(models.Model):
-    ledger = models.ForeignKey(Ledger, on_delete=models.CASCADE,null=True, blank=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True, blank=True)
+    
+    ledger = models.ForeignKey(Ledger, on_delete=models.SET_NULL,null=True, blank=True)
     supplier_id = models.IntegerField(unique=True)
     supplier_name = models.CharField(max_length=255)
     supplier_code = models.CharField(max_length=50)
@@ -166,7 +170,7 @@ class Supplier(models.Model):
 
 class PurchaseInvoice(models.Model):
     quotation_number = models.AutoField(primary_key=True)  
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE,null=True, blank=True)
+    supplier = models.ForeignKey(Supplier, on_delete=models.SET_NULL,null=True, blank=True)
 
     billing_address = models.TextField()
     shipping_address = models.TextField(blank=True)
@@ -219,9 +223,106 @@ class PurchaseInvoiceItemRow(models.Model):
 
 
 
+class SalesQuotation(models.Model):
+   
+    salesstatus_TYPE_CHOICES=[
+        ('Approved', 'Approved'),
+        ('Disapproved', 'Disapproved'),
+        ('Pending', 'Pending'),
+        ('DeliverPending', 'DeliverPending'),
+        ('Completed', 'Completed'),
+        
+        
+    ]
+    quotation_number = models.AutoField(primary_key=True)  
+    customer = models.ForeignKey(CustomUser, on_delete=models.SET_NULL,null=True, blank=True)
+
+    billing_address = models.TextField()
+    shipping_address = models.TextField(blank=True)
+    quotation_date = models.DateField(auto_now_add=True,null=True, blank=True)
+    delivery_date = models.DateField(null=True, blank=True)
+    
+    terms_and_conditions = models.TextField(blank=True)
+    notes_comments = models.TextField(null=True,blank=True)
+    commision = models.PositiveIntegerField(null=True,blank=True,default=0)
+    
+    # Add a discount field if you intend to use it
+    sub_total = models.CharField(max_length=255,null=True, blank=True)
+
+    
+    approval = models.CharField(max_length=20, choices=salesstatus_TYPE_CHOICES)
+    
+
+    def __str__(self):
+        return f"SalesQuotation #{self.quotation_number}"
+    
+class SalesItemRow(models.Model):
+    ENTRY_TYPE_CHOICES = [
+        ('customer', 'Customer'),
+        ('agent', 'Agent'),
+        
+    ]
+ 
+    entry_type = models.CharField(max_length=20, choices=ENTRY_TYPE_CHOICES)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, related_name='product',null=True,blank=True)
+    quotation = models.ForeignKey(SalesQuotation, on_delete=models.CASCADE, related_name='items',null=True,blank=True)
+    product_name = models.CharField(max_length=255)
+    product_description = models.TextField()
+    quantity = models.PositiveIntegerField()
+    quantity_left = models.PositiveIntegerField()
+    unit_price = models.CharField(max_length=255)
+    total_price = models.CharField(max_length=255)
+  
+      
+    def save(self, *args, **kwargs):
+        # Set quantity_left to the initial quantity value when a new row is created
+        if not self.id and self.quantity:
+            self.quantity_left = self.quantity
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.product_description} - {self.quantity} units"
+
+    def __str__(self):
+        return f"{self.product_description} - {self.quantity} units"
 
 
+  
+class SalesDeliveryDetails(models.Model):
+    ROW_TYPE_CHOICES = [
+    ('dispatch', 'Dispatch'),
+    ('delivery', 'Delivery'),
+    ]
+    status_row = [
+    ('pending', 'Pending'),
+    ('delivered', 'Delivered'),
+    ]
+    created_at=models.DateField(auto_now_add=True,null=True, blank=True)
+    OrderFk = models.ForeignKey(SalesQuotation, on_delete=models.SET_NULL,null=True, blank=True)
 
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL,null=True, blank=True)
+    order = models.ForeignKey(SalesItemRow, on_delete=models.SET_NULL,null=True, blank=True)
+    row_type = models.CharField(max_length=20, choices=ROW_TYPE_CHOICES)
+    vehicle_number = models.CharField(max_length=20)
+    date_of_delivery = models.DateField()
+    no_of_bags = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField()
+    jute_bags = models.PositiveIntegerField()
+    plastic_bags = models.PositiveIntegerField()
+    fssi = models.PositiveIntegerField()
+    loose = models.PositiveIntegerField()
+    status = models.CharField(max_length=20, choices=status_row,default='pending')
+    final_quantity_price= models.CharField(max_length=20,null=True, blank=True)
+    
+
+    def __str__(self):
+        return f"SalesDeliveryDetails for Order {self.order.id}"    
+    
+    
+    
+    
+    
 
 
 
@@ -235,7 +336,7 @@ class PurchaseQuotation(models.Model):
         
     ]
     quotation_number = models.AutoField(primary_key=True)  
-    # supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE,null=True, blank=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True, blank=True)
 
     billing_address = models.TextField()
     shipping_address = models.TextField(blank=True)

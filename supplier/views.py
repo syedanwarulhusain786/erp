@@ -16,7 +16,7 @@ def supplier_home(request):
 from django.shortcuts import render
 
 def purchase_order_page(request):
-    products=Product.objects.all()
+    products=Product.objects.filter(category=ProductCategory.objects.get(name='Purchase'))
     if request.method == 'POST':
         product_id = request.POST.get('product')
         quantity = int(request.POST.get('quantity', 0))
@@ -52,7 +52,7 @@ def purchase_order_page(request):
         )
         order.save()
 
-        return redirect('approved')  
+        return redirect('supplierapproved')  
 
   
 
@@ -136,9 +136,9 @@ def startdelivery(request,order_id):
 
 
 
-def approved(request):
+def supplierapproved(request):
     Orders=Order.objects.filter(is_approved='approved',user=request.user)
     return render(request, 'supplierOrderside/approved.html', {'Orders': Orders})  
-def disapproved(request):
+def supplierdisapproved(request):
     Orders=Order.objects.filter(is_approved='disapproved')
     return render(request, 'supplierOrderside/disapproved.html', {'Orders': Orders})  

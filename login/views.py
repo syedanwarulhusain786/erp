@@ -22,8 +22,13 @@ def index(request):
                             if user.account_type.name=='Supplier':
                                 login(request, user)
                                 return redirect('supplier-home')
-                        login(request, user)
-                        return redirect('home')  # Replace 'home' with your home page URL.
+                            elif user.account_type.name=='Customer':
+                                login(request, user)
+                                return redirect('customer_home')
+                    
+                        print('hi')
+                        # login(request, user)
+                        # return redirect('home')  # Replace 'home' with your home page URL.
                     else:
                         message="No Department Alotted to You Please ask admin To allot department"
                         return render(request, 'login.html', {'message': message}) 

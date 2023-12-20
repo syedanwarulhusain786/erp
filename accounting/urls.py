@@ -20,6 +20,23 @@ from . import views
 from .views import ProductListView, product_form, product_delete
 from .views import GeneratePDF
 urlpatterns = [
+    path('salesapprove/', views.salesapprove, name='salesapprove'),
+    path('sales_quotations/<int:pk>/', views.SalesQuotationDetailView, name='sales_quotation_detail'),
+    # path('approve_order/<int:order_id>/',  views.approve_order, name='approve_order'),
+    # path('disapprove_order/<int:order_id>/',  views.disapprove_order, name='disapprove_order'),
+    path('salesapproved/', views.salesapproved, name='salesapproved'),
+    path('salesdisapproved/', views.salesdisapproved, name='salesdisapproved'),
+    path('acceptDelivery/<int:order_id>/', views.acceptDelivery, name='acceptDelivery'),
+    path('updateDelivery/<int:order_id>/', views.updateDelivery, name='updateDelivery'),
+    path('salesstartdelivery/<int:order_id>/', views.salesstartdelivery, name='salesstartdelivery'),
+    
+    
+    
+    
+    
+    
+    
+    
     path('approve/', views.approve, name='approve'),
 
     # path('approve_order/<int:order_id>/',  views.approve_order, name='approve_order'),

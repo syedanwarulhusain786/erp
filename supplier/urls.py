@@ -32,8 +32,8 @@ urlpatterns = [
     path('bidwon/', views.bidwon, name='bidwon'),
     path('purchase_quotations/<int:quotation_number>/', views.purchase_quotation_detail, name='purchase_quotation_detail'),
     #  path('purchase_quotations/<int:quotation_number>/place_bid/', views.place_bid, name='place_bid'),
-    path('approved/', views.approved, name='approved'),
-    path('disapproved/', views.disapproved, name='disapproved'),
+    path('approved/', views.supplierapproved, name='supplierapproved'),
+    path('disapproved/', views.supplierdisapproved, name='supplierdisapproved'),
     
     
     

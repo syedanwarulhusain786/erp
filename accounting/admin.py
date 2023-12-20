@@ -24,7 +24,7 @@ from .models import (
     DebitNoteEntry,
     DebitNoteEntryRow,
     VoucherLedgerVisibility,
-    Tax
+    Tax,SalesDeliveryDetails,SalesItemRow,SalesQuotation
 )
 def download_csv(modeladmin, request, queryset):
     response = HttpResponse(content_type='text/csv')
@@ -113,7 +113,14 @@ admin.site.register(Primary_Group)
 admin.site.register(VoucherLedgerVisibility)
 admin.site.register(Tax)
 
+
 admin.site.register(Group)
+admin.site.register(SalesQuotation)
+
+admin.site.register(SalesItemRow)
+
+admin.site.register(SalesDeliveryDetails)
+
 admin.site.register(Ledger)
 admin.site.register(Customer)
 admin.site.register(Supplier)

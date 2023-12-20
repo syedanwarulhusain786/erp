@@ -187,8 +187,14 @@
             <span class="hide-menu">Account Ledger</span>
           </a>
         </li>
-
-
+        <li class="sidebar-item">
+          <a href="{% url 'addsupplier' %}" class="sidebar-link">
+            <div class="round-16 d-flex align-items-center justify-content-center">
+              <i class="ti ti-circle"></i>
+            </div>
+            <span class="hide-menu">Add User</span>
+          </a>
+        </li>
         <li class="sidebar-item">
           <a href="{% url 'customer' %}" class="sidebar-link">
             <div class="round-16 d-flex align-items-center justify-content-center">
@@ -294,6 +300,60 @@
               <i class="ti ti-circle"></i>
             </div>
             <span class="hide-menu">Order Disapproved</span>
+          </a>
+        </li>
+
+
+        <!-- <li class="sidebar-item">
+          <a href="{% url 'purchaseOrder' %}" class="sidebar-link">
+            <div class="round-16 d-flex align-items-center justify-content-center">
+              <i class="ti ti-circle"></i>
+            </div>
+            <span class="hide-menu">Purchase Invoices</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="{% url 'list_services' %}" class="sidebar-link">
+            <div class="round-16 d-flex align-items-center justify-content-center">
+              <i class="ti ti-circle"></i>
+            </div>
+            <span class="hide-menu">Purchase Return</span>
+          </a>
+        </li> -->
+        
+      </ul>
+    </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+        <span class="d-flex">
+          <i class="ti ti-shopping-cart"></i>
+        </span>
+        <span class="hide-menu">Sales</span>
+      </a>
+      <ul aria-expanded="false" class="collapse first-level">
+        <li class="sidebar-item">
+          <a href="{% url 'salesapprove' %}" class="sidebar-link">
+            <div class="round-16 d-flex align-items-center justify-content-center">
+              <i class="ti ti-circle"></i>
+            </div>
+            <span class="hide-menu">Sales Order Approval</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="{% url 'salesapproved' %}" class="sidebar-link">
+            <div class="round-16 d-flex align-items-center justify-content-center">
+              <i class="ti ti-circle"></i>
+            </div>
+            <span class="hide-menu">Sales Order Approved</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="{% url 'salesdisapproved' %}" class="sidebar-link">
+            <div class="round-16 d-flex align-items-center justify-content-center">
+              <i class="ti ti-circle"></i>
+            </div>
+            <span class="hide-menu">Sales Order Disapproved</span>
           </a>
         </li>
 
@@ -888,7 +948,7 @@
 
    
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{% url 'approved' %}" aria-expanded="false">
+            <a class="sidebar-link" href="{% url 'supplierapproved' %}" aria-expanded="false">
               <span>
                 <img src="{% static 'icons/invoice.png' %}" alt="All Products Icon" width="24" height="24">
 
@@ -898,7 +958,7 @@
           </li>
 
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{% url 'disapproved' %}" aria-expanded="false">
+            <a class="sidebar-link" href="{% url 'supplierdisapproved' %}" aria-expanded="false">
               <span>
                 <img src="{% static 'icons/new-product.png' %}" alt="All Products Icon" width="24" height="24">
 
@@ -914,7 +974,72 @@
 
 
 </nav>
+{% elif user.department.name == "NONE" and user.account_type.name == "Customer" %}
 
+<nav class="sidebar-nav scroll-sidebar" data-simplebar>
+  <ul id="sidebarnav">
+     <!-- ---------------------------------- -->
+     <!-- Home -->
+     <!-- ---------------------------------- -->
+     <li class="nav-small-cap">
+       <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+       <span class="hide-menu">Dashboard</span>
+     </li>
+     <li class="sidebar-item">
+       <a class="sidebar-link" href="{% url 'customer_home' %}" aria-expanded="false">
+         <span>
+           <img src="{% static 'icons/dashboard.png' %}" alt="All Products Icon" width="24" height="24">
+
+         </span>
+         <span class="hide-menu">Home</span>
+       </a>
+     </li>
+
+
+
+     <li class="nav-small-cap">
+      <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+      <span class="hide-menu">Orders</span>
+    </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="{% url 'sale_order_page' %}" aria-expanded="false">
+        <span>
+          <img src="{% static 'icons/new-product.png' %}" alt="All Products Icon" width="24" height="24">
+
+        </span>
+        <span class="hide-menu">Create Order</span>
+      </a>
+    </li>
+
+
+
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="{% url 'approved' %}" aria-expanded="false">
+        <span>
+          <img src="{% static 'icons/invoice.png' %}" alt="All Products Icon" width="24" height="24">
+
+        </span>
+        <span class="hide-menu">Approved Order</span>
+      </a>
+    </li>
+
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="{% url 'disapproved' %}" aria-expanded="false">
+        <span>
+          <img src="{% static 'icons/new-product.png' %}" alt="All Products Icon" width="24" height="24">
+
+        </span>
+        <span class="hide-menu">Disapproved Order</span>
+      </a>
+    </li>
+   
+   
+
+    
+  </ul>
+
+
+</nav>
   {% else %}
       <!-- Default sidebar or no sidebar -->
   {% endif %}
