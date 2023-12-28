@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from django.core.validators import MinValueValidator
+from django.db.models import Sum  
 from login.models import *
 def get_image_filename(instance, filename):
     """Generate a unique filename for each uploaded image."""
@@ -180,3 +182,89 @@ class Notification(models.Model):
     message = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
+
+
+
+
+
+ 
+class MaterialStock(models.Model):
+    purchase = 'purchase'
+    sales = 'sales'
+    
+
+
+    UNIT_CHOICES = [
+        (purchase, 'Purchase'),
+        (sales, 'Sales'),
+        
+        
+    ]
+    type = models.CharField(max_length=10, choices=UNIT_CHOICES, default=purchase)
+    material = models.ForeignKey(Material, on_delete=models.SET_NULL ,blank=True,null=True)
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    cost_of_single = models.DecimalField(max_digits=40, decimal_places=2)
+    cost_of_all = models.DecimalField(max_digits=50, decimal_places=2)
+    total_value = models.DecimalField(max_digits=50, decimal_places=2)
+    entry_date = models.DateTimeField(auto_now_add=True)
+    def save(self, *args, **kwargs):
+        # Calculate cost_of_all and total_value before saving
+        self.cost_of_all = self.cost_of_single * self.quantity
+       
+
+        # Calculate total_value as the sum of cost_of_all for the same material
+        total_cost_of_all = MaterialStock.objects.filter(material=self.material).aggregate(
+            total_cost=Sum('cost_of_all')
+        )['total_cost'] or self.cost_of_all
+        self.total_value = total_cost_of_all+self.cost_of_all
+        super().save(*args, **kwargs)
+
+class ProductStock(models.Model):
+    purchase = 'purchase'
+    sales = 'return'
+    
+
+
+    UNIT_CHOICES = [
+        (purchase, 'Purchase'),
+        (sales, 'Return'),
+        
+        
+    ]
+    delivery = models.ForeignKey(DeliveryDetails, on_delete=models.SET_NULL,blank=True,null=True)
+
+    type = models.CharField(max_length=10, choices=UNIT_CHOICES, default=purchase)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL,blank=True,null=True)
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    cost_of_single = models.DecimalField(max_digits=50, decimal_places=2)
+    cost_of_all = models.DecimalField(max_digits=50, decimal_places=2)
+    total_value = models.DecimalField(max_digits=50, decimal_places=2)
+    entry_date = models.DateTimeField(auto_now_add=True)
+    def save(self, *args, **kwargs):
+        # Calculate cost_of_all and total_value before saving
+        self.cost_of_all = self.cost_of_single * self.quantity
+        
+
+        # Calculate total_value as the sum of cost_of_all for the same product
+        total_cost_of_all = ProductStock.objects.filter(product=self.product).aggregate(
+            total_cost=Sum('cost_of_all')
+        )['total_cost'] or self.cost_of_all
+        self.total_value = total_cost_of_all+self.cost_of_all
+        super().save(*args, **kwargs)
+        
+        
+
+class AllocateMaterial(models.Model):
+    sales= models.CharField(max_length=50)
+    
+    material = models.CharField(max_length=50)
+    unit = models.CharField(max_length=50)
+    quantity_per_piece = models.IntegerField()
+    order_quantity = models.IntegerField()
+    required = models.IntegerField()
+    available = models.IntegerField()
+    allocated = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.sales
+    

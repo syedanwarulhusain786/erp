@@ -1,6 +1,6 @@
 # admin.py
 from django.contrib import admin
-from .models import Material, ProductCategory, Product,DeliveryDetails, ServiceCategory, Service,ProductBrand,ProductMaterial,Order
+from .models import Material, ProductCategory, Product,DeliveryDetails, ServiceCategory, Service,ProductBrand,ProductMaterial,Order,ProductStock
 
 class ProductDetailsAdmin(admin.ModelAdmin):
     list_display = ('name', 'productCost', 'productSelling', 'category')
@@ -48,6 +48,7 @@ class ProductMaterialAdmin(admin.ModelAdmin):
 admin.site.register(ProductMaterial, ProductMaterialAdmin)
 admin.site.register(Order)
 admin.site.register(DeliveryDetails)
+admin.site.register(ProductStock)
 
 
 

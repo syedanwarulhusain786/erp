@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function addNewRow() {
         console.log('414')
         const table = document.getElementById("transactionTable");
-        const newRow = table.insertRow(table.rows.length - 5); // Insert before the last row
+        const newRow = table.insertRow(table.rows.length - 3); // Insert before the last row
 
         // Clone the cells from an existing row (you can choose any row as a template)
         const templateRow = table.rows[1]; // Assuming the second row (index 1) is your template
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Update the IDs of the cloned elements to avoid duplicates
-        const rowIndex = table.rows.length - 4; // Index of the new row (0-based)
+        const rowIndex = table.rows.length - 2; // Index of the new row (0-based)
         const elementsToChange = newRow.querySelectorAll("[id]");
         elementsToChange.forEach(function (element) {
             const id = element.getAttribute("id");

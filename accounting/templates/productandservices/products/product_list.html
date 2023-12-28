@@ -59,8 +59,7 @@
             <th scope="col">#</th>
             <th scope="col">Product name</th>
             <th scope="col">Product Description</th>
-            <th scope="col">Product Cost</th>
-            <th scope="col">Product Selling</th>
+            <th scope="col">Product Category</th>
 
          
 
@@ -74,14 +73,13 @@
           </tr>
         </thead>
         <tbody>
-          {% for Supplier in object_list %}
+          {% for Supplier in products %}
 
           <tr>
             <td scope="row">{{ forloop.counter }}</td>
             <td>{{ Supplier.name }}</td>
             <td>{{ Supplier.description }}</td>
-            <td>{{ Supplier.productCost }}</td>
-            <td>{{ Supplier.productSelling }}</td>
+            <td>{{ Supplier.category }}</td>
      
            
 

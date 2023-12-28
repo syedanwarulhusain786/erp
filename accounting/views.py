@@ -312,7 +312,7 @@ def acceptDelivery(request,order_id):
     except:
         latest_delivery=''
     
-        
+     
         
         
     return render(request, 'adminOrder/acceptdelivery.html', {'Orders': Orders[0],'delivery':delivery,'last':latest_delivery})  
@@ -356,6 +356,13 @@ def updateDelivery(request,order_id):
             status='delivered'
         )
         order.save()
+        prod=ProductStock()  
+        prod.delivery=delivery  
+        prod.product=tObj.product  
+        prod.type='purchase'
+        prod.quantity=quantity  
+        prod.cost_of_single=tObj.price_per_quantal
+        prod.save()
         # Notification.objects.create(user=order.user, message=f'Your Delivery is Accepted: Order #{order.id}')
         return redirect('adminapproved')
         
